@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#12100e">
+<title>起卦 · 六壬六爻梅花</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23100e0c'/%3E%3Cg fill='%23c9a35c'%3E%3Crect x='6' y='8' width='20' height='3'/%3E%3Crect x='6' y='14.5' width='8.5' height='3'/%3E%3Crect x='17.5' y='14.5' width='8.5' height='3'/%3E%3Crect x='6' y='21' width='20' height='3'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">☰</span>
+    <span class="brand-name">起卦</span>
+  </div>
+  <button class="icon-btn" id="btn-settings" aria-label="设置">⚙</button>
+</header>
+
+<main id="views">
+
+  <!-- ══════════ 小六壬 ══════════ -->
+  <section class="view" data-view="xlr">
+    <div class="card cast-card">
+      <h2 class="card-title">小六壬 <span class="sub">三宫定始中终</span></h2>
+      <label class="field">
+        <span class="field-label">所占何事</span>
+        <input type="text" id="xlr-q" maxlength="60" placeholder="可留空">
+      </label>
+      <div class="seg" id="xlr-mode">
+        <button class="seg-btn on" data-m="time">时间起卦</button>
+        <button class="seg-btn" data-m="nums">报数起卦</button>
+      </div>
+      <div class="field-row" id="xlr-cal-row">
+        <label class="field">
+          <span class="field-label">历法派别</span>
+          <select id="xlr-cal">
+            <option value="lunar" selected>农历（原书口诀，默认）</option>
+            <option value="jieqi">节气月派</option>
+            <option value="solar">公历派（与口诀不符）</option>
+          </select>
+        </label>
+      </div>
+      <div class="field-row hide" id="xlr-nums-row">
+        <label class="field"><span class="field-label">月位数</span><input type="number" id="xlr-n1" min="1" value="1"></label>
+        <label class="field"><span class="field-label">日位数</span><input type="number" id="xlr-n2" min="1" value="1"></label>
+        <label class="field"><span class="field-label">时位数</span><input type="number" id="xlr-n3" min="1" value="1"></label>
+      </div>
+      <button class="cast-btn" id="xlr-go">起 卦</button>
+    </div>
+    <div class="result" id="xlr-out"></div>
+  </section>
+
+  <!-- ══════════ 六爻 ══════════ -->
+  <section class="view" data-view="ly">
+    <div class="card cast-card">
+      <h2 class="card-title">六爻 <span class="sub">京房纳甲</span></h2>
+      <label class="field">
+        <span class="field-label">所占何事</span>
+        <input type="text" id="ly-q" maxlength="60" placeholder="可留空">
+      </label>
+      <div class="seg" id="ly-mode">
+        <button class="seg-btn on" data-m="shake">摇卦</button>
+        <button class="seg-btn" data-m="manual">手动摇六次</button>
+        <button class="seg-btn" data-m="time">时间起卦</button>
+      </div>
+
+      <div id="ly-manual" class="hide">
+        <p class="hint">自下而上，逐爻记下三枚铜钱的<b>背面数</b>（0~3）。<br>
+          三背老阳（动）· 三面老阴（动）· 二背少阴 · 一背少阳</p>
+        <div class="bei-grid" id="ly-bei"></div>
+      </div>
+
+      <button class="cast-btn" id="ly-go">起 卦</button>
+    </div>
+    <div class="result" id="ly-out"></div>
+  </section>
+
+  <!-- ══════════ 大六壬 ══════════ -->
+  <section class="view" data-view="dlr">
+    <div class="card cast-card">
+      <h2 class="card-title">大六壬 <span class="sub">四课三传九宗门</span></h2>
+      <label class="field">
+        <span class="field-label">所占何事</span>
+        <input type="text" id="dlr-q" maxlength="60" placeholder="可留空">
+      </label>
+      <details class="adv">
+        <summary>手动指定占时 / 月将（不填则按时刻自动推）</summary>
+        <div class="field-row">
+          <label class="field">
+            <span class="field-label">占时</span>
+            <select id="dlr-zs"><option value="">自动</option></select>
+          </label>
+          <label class="field">
+            <span class="field-label">月将</span>
+            <select id="dlr-yj"><option value="">自动（按中气）</option></select>
+          </label>
+          <label class="field">
+            <span class="field-label">昼夜</span>
+            <select id="dlr-dn">
+              <option value="">自动（卯～申为昼）</option>
+              <option value="1">强制昼</option>
+              <option value="0">强制夜</option>
+            </select>
+          </label>
+        </div>
+      </details>
+      <button class="cast-btn" id="dlr-go">起 课</button>
+    </div>
+    <div class="result" id="dlr-out"></div>
+  </section>
+
+  <!-- ══════════ 梅花易数 ══════════ -->
+  <section class="view" data-view="mh">
+    <div class="card cast-card">
+      <h2 class="card-title">梅花易数 <span class="sub">体用互变</span></h2>
+      <label class="field">
+        <span class="field-label">所占何事</span>
+        <input type="text" id="mh-q" maxlength="60" placeholder="可留空">
+      </label>
+      <div class="seg" id="mh-mode">
+        <button class="seg-btn on" data-m="time">年月日时</button>
+        <button class="seg-btn" data-m="two">两数</button>
+        <button class="seg-btn" data-m="one">一数加时</button>
+        <button class="seg-btn" data-m="text">字数</button>
+      </div>
+      <div class="field-row hide" id="mh-two-row">
+        <label class="field"><span class="field-label">前数（上卦）</span><input type="number" id="mh-a" min="1" value="1"></label>
+        <label class="field"><span class="field-label">后数（下卦）</span><input type="number" id="mh-b" min="1" value="1"></label>
+      </div>
+      <div class="field-row hide" id="mh-one-row">
+        <label class="field"><span class="field-label">报一个数</span><input type="number" id="mh-n" min="1" value="1"></label>
+      </div>
+      <div class="field-row hide" id="mh-text-row">
+        <label class="field"><span class="field-label">所报之字（≥2 字）</span><input type="text" id="mh-text" maxlength="40" placeholder="如：平安顺遂"></label>
+      </div>
+      <button class="cast-btn" id="mh-go">起 卦</button>
+    </div>
+    <div class="result" id="mh-out"></div>
+  </section>
+
+</main>
+
+<nav class="tabbar" id="tabbar">
+  <button class="tab on" data-go="xlr"><span class="tab-ico">六</span><span>小六壬</span></button>
+  <button class="tab" data-go="ly"><span class="tab-ico">爻</span><span>六爻</span></button>
+  <button class="tab" data-go="dlr"><span class="tab-ico">壬</span><span>大六壬</span></button>
+  <button class="tab" data-go="mh"><span class="tab-ico">梅</span><span>梅花</span></button>
+</nav>
+
+<!-- ══════════ 设置抽屉 ══════════ -->
+<div class="sheet-mask hide" id="sheet-mask"></div>
+<div class="sheet hide" id="sheet">
+  <div class="sheet-head">
+    <h2>设置与流派声明</h2>
+    <button class="icon-btn" id="btn-sheet-close" aria-label="关闭">✕</button>
+  </div>
+  <div class="sheet-body">
+
+    <div class="set-group">
+      <h3>历法地基</h3>
+      <label class="switch">
+        <input type="checkbox" id="set-tst" checked>
+        <span>用真太阳时定时辰</span>
+      </label>
+      <p class="note">默认<b>开</b>。关掉则直接用北京时间。异地用户经度差可达 ±1 小时，足以跨时辰、换掉整个卦。</p>
+      <label class="field">
+        <span class="field-label">所在经度（东经为正）</span>
+        <input type="number" id="set-lon" step="0.1" min="-180" max="180" value="120">
+      </label>
+      <p class="note">120°E 为东八区标准经线，填 120 等于不做经度校正。杭州约 120.2，北京约 116.4，成都约 104.1。</p>
+      <label class="field">
+        <span class="field-label">子时归属（早/晚子时之争）</span>
+        <select id="set-sect">
+          <option value="2" selected>晚子时：23:00 后日柱进次日（默认）</option>
+          <option value="1">早子时：23:00–24:00 仍算当日</option>
+        </select>
+      </label>
+      <p class="note">这是<b>真实存在的流派分歧</b>，不是 bug。两派算出的日干支不同，会连带改变旬空、六神起点、大六壬的日干寄宫。本 APP 默认取晚子时派，可在此切换。</p>
+    </div>
+
+    <div class="set-group">
+      <h3>已知流派分歧（本 APP 的选择）</h3>
+      <ul class="diverge">
+        <li>
+          <b>天乙贵人昼夜分配</b> ——
+          口诀「甲戊庚牛羊，乙己鼠猴乡，丙丁猪鸡位，壬癸蛇兔藏，六辛逢马虎」<b>只给每组共用的两支，没说哪支属昼、哪支属夜</b>。
+          各家书表互有出入，这是大六壬最大的分歧点。
+          本 APP 取昼贵：甲未 乙申 丙酉 丁亥 戊未 己子 庚丑 辛午 壬卯 癸巳；夜贵取同组另一支。
+          选它的理由是<b>可互校</b>（与作者另一个八字工具 zhanbu 逐格一致），<b>不是因为它更"正确"</b>。
+        </li>
+        <li><b>戊己寄宫</b> —— 取戊寄巳、己寄未（《六壬大全》主流）。另有戊寄辰、己寄丑一派。</li>
+        <li><b>月将换将</b> —— 按<b>中气</b>换将（雨水后亥将…）。另有按节换将一派。注意：月将<b>不能</b>按农历月查表。</li>
+        <li><b>小六壬历法</b> —— 默认农历（原书口诀所指），另提供节气月派、公历派。</li>
+        <li><b>小六壬六神五行</b> —— 各家表不一（小吉有作木者、留连有作土者），取流传最广一种，仅用于三宫生克参考。</li>
+        <li><b>梅花体用</b> —— 取「动爻所在之卦为用」主流派，同时列出「下卦恒为体」一派的结论供对照。</li>
+        <li><b>六爻摇卦计法</b> —— 以「背为阳」计。另有「字为阳」一派，会把少阴少阳对调。</li>
+        <li><b>变爻六亲</b> —— 同时给出按变卦之宫（默认显示）与按本卦之宫两个标注。</li>
+      </ul>
+    </div>
+
+    <div class="set-group">
+      <h3>关于结论</h3>
+      <p class="note">本 APP <b>只排盘、只呈现口诀与原文，不生成"此事必成/必败"之类的断语</b>。
+        卦爻辞取自《周易》通行本，机械抽取自可追溯的数据源，非模型生成。
+        判断留给你自己。</p>
+      <p class="note" id="about-src"></p>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast hide" id="toast"></div>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

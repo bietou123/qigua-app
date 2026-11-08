@@ -1,0 +1,15 @@
+node_modules/
+www/src/
+www/vendor/
+screenshots/
+android/app/build/
+android/build/
+android/.gradle/
+android/local.properties
+android/app/src/main/assets/public/
+android/app/src/main/assets/capacitor.config.json
+android/app/src/main/assets/capacitor.plugins.json
+
+# 签名密钥与密码：泄露即等于别人能冒名发版，绝不入库
+android/qigua-release.jks
+android/keystore.properties

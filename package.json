@@ -1,0 +1,36 @@
+{
+  "name": "qigua-app",
+  "version": "1.0.0",
+  "description": "起卦占卜 — 小六壬/大六壬/六爻/梅花易数 排盘 App",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "serve": "node tools/serve.cjs",
+    "data": "node tools/build-yijing-data.cjs && node tools/vendor-lunar.cjs",
+    "build": "node tools/build-www.cjs",
+    "smoke": "node tools/smoke.cjs",
+    "shots": "node tools/shots.cjs",
+    "icons": "node tools/make-icons.cjs"
+  },
+  "keywords": [
+    "liuyao",
+    "daliuren",
+    "meihua",
+    "xiaoliuren",
+    "divination",
+    "capacitor",
+    "android"
+  ],
+  "author": "bietou123",
+  "license": "MIT",
+  "type": "module",
+  "private": true,
+  "dependencies": {
+    "@capacitor/android": "^6.2.1",
+    "@capacitor/cli": "^6.2.1",
+    "@capacitor/core": "^6.2.1"
+  }
+}

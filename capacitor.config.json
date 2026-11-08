@@ -1,0 +1,12 @@
+{
+  "appId": "top.arrowwood.qigua",
+  "appName": "起卦",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  },
+  "server": {
+    "androidScheme": "https"
+  }
+}
